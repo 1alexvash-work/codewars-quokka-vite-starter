@@ -1,4 +1,4 @@
-import { assertEqual } from "../helpers/assertEqual";
+import { assertEqual } from "./helpers/assertEqual";
 import { add } from "./add";
 
 const result = assertEqual({
