@@ -89,3 +89,26 @@ assertEqual({
     S: 4,
   },
 });
+
+// Difficult string to parse =>
+// K4[ON(SO 3)2]2
+
+// A bit easier string to parse, with only a single type of braces =>
+// K4(ON(SO 3)2)2
+
+// Still an easier version to parse, with an individual atom count per element, to distingish groups of atoms =>
+// K4(O1N1(S1O3)2)2
+
+// First parenthesis unfold =>
+// K4(O1N1S2O6)2
+
+// Second parenthesis unfold =>
+// K4O2N2S4O12
+
+// Gather atoms =>
+// K4O14N2S4
+
+// Final object result =>
+// { K: 4, O: 14, N: 2, S: 4}
+
+// I mean, the string above, is very easy to parse, but I just need to take it step by step, and not try to do everything at once
