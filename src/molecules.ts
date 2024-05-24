@@ -11,7 +11,7 @@ import { assertEqual } from "./helpers/assertEqual";
 // Disect atoms in the formula ❌
 // Multiply the count of atoms in the formula ❌
 
-function replaceBrackets(formula: string): string {
+function adjustBrackets(formula: string): string {
   formula = formula.replace(/{/g, "(");
   formula = formula.replace(/}/g, ")");
 
@@ -19,6 +19,52 @@ function replaceBrackets(formula: string): string {
   formula = formula.replace(/\]/g, ")");
 
   return formula;
+}
+
+function adjustZeroElementsWithOne(formula: string): string {
+  // find all elements
+  // iterate over all of them
+  // If atom has no number after it, add 1
+
+  // let's split into string, it will make it a bit easier to work with
+  const formulaArray = formula.split("");
+  console.log("formulaArray:", formulaArray);
+
+  // Basically, I need to do two things, during the iteration
+  // If the next character is a small letter, then add two atoms into a single element
+  // If the number is missing, after this character, or character group, called atom for the short, then add 1 to it
+  // If the character is parenthesis, then skip iteration
+
+  const formulaArrayMutated = formulaArray.reduce(
+    (accumulator: string[], current, index) => {
+      if (current === "") {
+        return accumulator;
+      }
+
+      const nextCharacter = formulaArray[index + 1];
+
+      const nextCharacterIsPresent = nextCharacter !== undefined;
+      const nextCharacterIsLowerCase =
+        nextCharacterIsPresent && /[a-z]/.test(nextCharacter);
+
+      if (nextCharacterIsPresent && nextCharacterIsLowerCase) {
+        // Add two atoms into a single element
+
+        // mark next character as empty, so it is not added to the accumulator
+        formulaArray[index + 1] = "";
+
+        // !!! handle the case with numbers
+
+        return accumulator.concat([current + nextCharacter]);
+      }
+
+      return accumulator.concat(current);
+    },
+    []
+  );
+  console.log("formulaArrayMutated:", formulaArrayMutated);
+
+  return "";
 }
 
 // TODO
@@ -36,15 +82,17 @@ function replaceBrackets(formula: string): string {
 // wait, I can't cut it off, as it might be affected by the outer brackets
 // so let's firstly evaluate, the inner brackets and then replace them with the result
 
-function hasBrackets(formula: string): boolean {
-  return formula.includes("(");
-}
+// function hasBrackets(formula: string): boolean {
+//   return formula.includes("(");
+// }
 
 export function parseMolecule(formula: string): Record<string, number> {
   const answer: Record<string, number> = {};
 
   // Step one, replace odd brackets ✅
-  formula = replaceBrackets(formula);
+  formula = adjustBrackets(formula);
+
+  formula = adjustZeroElementsWithOne(formula);
 
   // Step two, add atom indexes ❌
   // (This will also, help in terms of pairing groups [atom, count] and [atom, count] in the formula)
@@ -60,13 +108,13 @@ export function parseMolecule(formula: string): Record<string, number> {
   return answer;
 }
 
-// assertEqual({
-//   actual: parseMolecule("H2O"),
-//   expected: {
-//     H: 2,
-//     O: 1,
-//   },
-// });
+assertEqual({
+  actual: parseMolecule("H2O"),
+  expected: {
+    H: 2,
+    O: 1,
+  },
+});
 
 assertEqual({
   actual: parseMolecule("Mg(OH)2"),
@@ -112,3 +160,9 @@ assertEqual({
 
 // * Thoughts, I guess I might be wasting time trying to solve it without regex
 // * Also, there's an additional problem I forgout about, it is to flatten out the elements after unfold, in case let's say I have the oxygen twice, though I might just proceed with this step at the final step
+
+// if I do conversion into "[Mg,5][O,5]([S,1][O,2])"
+// it is literally the same thing as if I would do the thing with tree, or for example, {element: "Mg", count: 5}, {element: "O", count: 5}, {element: "S", count: 1}, {element: "O", count: 2}
+
+// okay I talk to much, let's firstly implement the, indexing with a number
+// it will at least make it clear, on where there is a number elements pair, and this is going to make this task more simple, similar to the parenthesis substitution
