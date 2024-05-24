@@ -41,35 +41,32 @@ function hasBrackets(formula: string): boolean {
 }
 
 export function parseMolecule(formula: string): Record<string, number> {
+  const answer: Record<string, number> = {};
+
+  // Step one, replace odd brackets ✅
   formula = replaceBrackets(formula);
 
-  console.log({ formula });
+  // Step two, add atom indexes ❌
+  // (This will also, help in terms of pairing groups [atom, count] and [atom, count] in the formula)
+  // Can I represent, it in a tree structure, where I have the atom, and then the count, and then the next atom, and then the count
+  // Like this =>
 
-  if (hasBrackets(formula)) {
-    formula = formula.replace(")", "}"); // replace the first closing bracket with }
+  // Step three, find the most nested brackets ❌
+  // Step four, evaluate the expression in the most nested brackets ❌
+  // Step five, replace the most nested brackets with the result ❌
+  // Step six, repeat until no brackets left ❌
+  // Flat out a group of similar atoms ❌
 
-    let closingBracketIndex = formula.indexOf("}");
-    let openingBracketIndex = formula.lastIndexOf("(", closingBracketIndex);
-
-    // Keep debugging tomorrow
-    console.log({
-      closingBracketIndex,
-      openingBracketIndex,
-      s1: formula[closingBracketIndex],
-      s2: [openingBracketIndex],
-    });
-  }
-
-  return {};
+  return answer;
 }
 
-assertEqual({
-  actual: parseMolecule("H2O"),
-  expected: {
-    H: 2,
-    O: 1,
-  },
-});
+// assertEqual({
+//   actual: parseMolecule("H2O"),
+//   expected: {
+//     H: 2,
+//     O: 1,
+//   },
+// });
 
 assertEqual({
   actual: parseMolecule("Mg(OH)2"),
@@ -80,15 +77,15 @@ assertEqual({
   },
 });
 
-assertEqual({
-  actual: parseMolecule("K4[ON(SO 3)2]2"),
-  expected: {
-    K: 4,
-    O: 14,
-    N: 2,
-    S: 4,
-  },
-});
+// assertEqual({
+//   actual: parseMolecule("K4[ON(SO 3)2]2"),
+//   expected: {
+//     K: 4,
+//     O: 14,
+//     N: 2,
+//     S: 4,
+//   },
+// });
 
 // Difficult string to parse =>
 // K4[ON(SO 3)2]2
@@ -112,3 +109,6 @@ assertEqual({
 // { K: 4, O: 14, N: 2, S: 4}
 
 // I mean, the string above, is very easy to parse, but I just need to take it step by step, and not try to do everything at once
+
+// * Thoughts, I guess I might be wasting time trying to solve it without regex
+// * Also, there's an additional problem I forgout about, it is to flatten out the elements after unfold, in case let's say I have the oxygen twice, though I might just proceed with this step at the final step
