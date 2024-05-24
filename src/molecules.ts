@@ -59,9 +59,53 @@ function gatherAtomGroups(formulaArray: string[]): string[] {
     },
     []
   );
-  console.log("formulaArrayMutated:", formulaArrayMutated);
 
   return formulaArrayMutated;
+}
+
+function parseToObjects(formulaArrayMutated: string[]) {
+  const arrayOfObjects = formulaArrayMutated.reduce(
+    (accumulator: any[], current, index) => {
+      if (current === "") {
+        return accumulator;
+      }
+
+      const nextCharacter = formulaArrayMutated[index + 1];
+
+      // check if the current character is a letter
+      const isCurrentLetter = /[a-zA-Z]{1,2}/.test(current);
+      const isNextCharacterNumber = !isNaN(parseInt(nextCharacter));
+
+      if (isCurrentLetter) {
+        if (isNextCharacterNumber) {
+          formulaArrayMutated[index + 1] = "";
+
+          return accumulator.concat({
+            element: current,
+            count: parseInt(nextCharacter),
+          });
+        }
+
+        // if the next is not a number, then add the element with the count of 1
+        return accumulator.concat({
+          element: current,
+          count: 1,
+        });
+      }
+
+      return accumulator.concat(current);
+    },
+    []
+  );
+
+  // the desired end output [ { element: "H", count: 2 }, { element: "O", count: 1 }]
+  // to properly generate this list
+  // I need to check whether current iteratable is a letter or a number
+  // if it is a letter, then I need to check whether the next iteratable is a number
+  // if it is a number, then I need to add the element to the list, with the count
+  // if it is a letter, then I need to add the element to the list, with the count of 1
+
+  return arrayOfObjects;
 }
 
 // TODO
@@ -90,8 +134,10 @@ export function parseMolecule(formula: string): Record<string, number> {
   formula = adjustBrackets(formula);
 
   let formulaArray = stringToArray(formula);
-
   formulaArray = gatherAtomGroups(formulaArray);
+
+  let arrayOfObjects = parseToObjects(formulaArray);
+  console.log("arrayOfObjects:", arrayOfObjects);
 
   // next helper function, merge atoms with counts
   // if there's no count, set it to 1
