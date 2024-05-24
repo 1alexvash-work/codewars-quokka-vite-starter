@@ -21,14 +21,16 @@ function adjustBrackets(formula: string): string {
   return formula;
 }
 
-function adjustZeroElementsWithOne(formula: string): string {
+function stringToArray(formula: string): string[] {
+  return formula.split("");
+}
+
+function adjustZeroElementsWithOne(formulaArray: string[]): string[] {
   // find all elements
   // iterate over all of them
   // If atom has no number after it, add 1
 
   // let's split into string, it will make it a bit easier to work with
-  const formulaArray = formula.split("");
-  console.log("formulaArray:", formulaArray);
 
   // Basically, I need to do two things, during the iteration
   // If the next character is a small letter, then add two atoms into a single element
@@ -48,12 +50,7 @@ function adjustZeroElementsWithOne(formula: string): string {
         nextCharacterIsPresent && /[a-z]/.test(nextCharacter);
 
       if (nextCharacterIsPresent && nextCharacterIsLowerCase) {
-        // Add two atoms into a single element
-
-        // mark next character as empty, so it is not added to the accumulator
         formulaArray[index + 1] = "";
-
-        // !!! handle the case with numbers
 
         return accumulator.concat([current + nextCharacter]);
       }
@@ -64,7 +61,7 @@ function adjustZeroElementsWithOne(formula: string): string {
   );
   console.log("formulaArrayMutated:", formulaArrayMutated);
 
-  return "";
+  return formulaArrayMutated;
 }
 
 // TODO
@@ -92,7 +89,9 @@ export function parseMolecule(formula: string): Record<string, number> {
   // Step one, replace odd brackets ✅
   formula = adjustBrackets(formula);
 
-  formula = adjustZeroElementsWithOne(formula);
+  let formulaArray = stringToArray(formula);
+
+  formulaArray = adjustZeroElementsWithOne(formulaArray);
 
   // Step two, add atom indexes ❌
   // (This will also, help in terms of pairing groups [atom, count] and [atom, count] in the formula)
