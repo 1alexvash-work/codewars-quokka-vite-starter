@@ -25,7 +25,7 @@ function stringToArray(formula: string): string[] {
   return formula.split("");
 }
 
-function adjustZeroElementsWithOne(formulaArray: string[]): string[] {
+function gatherAtomGroups(formulaArray: string[]): string[] {
   // find all elements
   // iterate over all of them
   // If atom has no number after it, add 1
@@ -91,7 +91,10 @@ export function parseMolecule(formula: string): Record<string, number> {
 
   let formulaArray = stringToArray(formula);
 
-  formulaArray = adjustZeroElementsWithOne(formulaArray);
+  formulaArray = gatherAtomGroups(formulaArray);
+
+  // next helper function, merge atoms with counts
+  // if there's no count, set it to 1
 
   // Step two, add atom indexes ❌
   // (This will also, help in terms of pairing groups [atom, count] and [atom, count] in the formula)
