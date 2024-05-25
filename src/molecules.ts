@@ -1,6 +1,6 @@
 // www.codewars.com/kata/52f831fa9d332c6591000511/train/typescript
 
-import { assertEqual } from "./helpers/assertEqual";
+import { assertDeepEqual } from "./helpers/assertEqual";
 
 // Handle different brackets in the formula ✅
 // Handle nested brackets in the formula ❌
@@ -123,9 +123,9 @@ function parseToObjects(formulaArrayMutated: string[]) {
 // wait, I can't cut it off, as it might be affected by the outer brackets
 // so let's firstly evaluate, the inner brackets and then replace them with the result
 
-// function hasBrackets(formula: string): boolean {
-//   return formula.includes("(");
-// }
+function hasBrackets(arrayOfObjects: any[]): boolean {
+  return arrayOfObjects.some((element) => element === "(");
+}
 
 export function parseMolecule(formula: string): Record<string, number> {
   const answer: Record<string, number> = {};
@@ -138,6 +138,26 @@ export function parseMolecule(formula: string): Record<string, number> {
 
   let arrayOfObjects = parseToObjects(formulaArray);
   console.log("arrayOfObjects:", arrayOfObjects);
+
+  // let's forget about the double digits case, and work on unfolding the brackets
+
+  // no brackets => merge atoms with counts
+
+  if (hasBrackets(arrayOfObjects)) {
+    // unfold brackets
+  }
+
+  // merge atoms with counts
+  // oh this is a cool snippet, it automatically fixes the issue with atom duplication
+  arrayOfObjects.forEach(({ element, count }) => {
+    if (answer[element]) {
+      answer[element] += count;
+    } else {
+      answer[element] = count;
+    }
+  });
+
+  return answer;
 
   // next helper function, merge atoms with counts
   // if there's no count, set it to 1
@@ -152,19 +172,17 @@ export function parseMolecule(formula: string): Record<string, number> {
   // Step five, replace the most nested brackets with the result ❌
   // Step six, repeat until no brackets left ❌
   // Flat out a group of similar atoms ❌
-
-  return answer;
 }
 
-assertEqual({
+assertDeepEqual({
   actual: parseMolecule("H2O"),
   expected: {
     H: 2,
     O: 1,
   },
-});
+}); // ?
 
-assertEqual({
+assertDeepEqual({
   actual: parseMolecule("Mg(OH)2"),
   expected: {
     Mg: 1,
@@ -173,7 +191,7 @@ assertEqual({
   },
 });
 
-// assertEqual({
+// assertDeepEqual({
 //   actual: parseMolecule("K4[ON(SO 3)2]2"),
 //   expected: {
 //     K: 4,
