@@ -137,18 +137,54 @@ export function parseMolecule(formula: string): Record<string, number> {
   formulaArray = gatherAtomGroups(formulaArray);
 
   let arrayOfObjects = parseToObjects(formulaArray);
-  console.log("arrayOfObjects:", arrayOfObjects);
 
   // let's forget about the double digits case, and work on unfolding the brackets
 
   // no brackets => merge atoms with counts
 
+  // ! Basically work on the last part, while the equation has parentheses, keep unfolding them
+  // I keep basically take the first closing bracket, and then find the first opening bracket before that
+  // and then evaluate the expression in between
   if (hasBrackets(arrayOfObjects)) {
+    // then replace if with while
+    // find the first closing bracket
+    const closingBracketIndex = arrayOfObjects.findIndex(
+      (element) => element === ")"
+    );
+    const openingBracketIndex = arrayOfObjects
+      .slice(0, closingBracketIndex)
+      .lastIndexOf("(");
+
+    // replace removed elements with a placeholder "{}"
+    const innerBracketsPart = arrayOfObjects
+      .splice(
+        openingBracketIndex,
+        closingBracketIndex - openingBracketIndex + 2,
+        "placeholder"
+      )
+      .filter((element) => element !== "(" && element !== ")");
+    // extract multiplier
+
+    // ! WORK ON WHILE LOOP
+    // ! Handle the case with double digits, or empty values like in this case
+    console.log("innerBracketsPart:", innerBracketsPart);
+
+    const multiplier = innerBracketsPart.splice(-1)[0];
+    innerBracketsPart.forEach((element) => (element.count *= multiplier));
+
+    console.log({
+      innerBracketsPart,
+      multiplier,
+    });
+
+    // remove the placeholder elements, and insert the innerBracketsPart elemenets, plural
+    arrayOfObjects.splice(openingBracketIndex, 1, ...innerBracketsPart);
+
     // unfold brackets
   }
 
   // merge atoms with counts
-  // oh this is a cool snippet, it automatically fixes the issue with atom duplication
+  // oh this is a cool snippet, it automatically fixes the issue with atom duplication / or the need to flatten out the atoms at the end stage
   arrayOfObjects.forEach(({ element, count }) => {
     if (answer[element]) {
       answer[element] += count;
@@ -174,32 +210,32 @@ export function parseMolecule(formula: string): Record<string, number> {
   // Flat out a group of similar atoms ❌
 }
 
-assertDeepEqual({
-  actual: parseMolecule("H2O"),
-  expected: {
-    H: 2,
-    O: 1,
-  },
-}); // ?
-
-assertDeepEqual({
-  actual: parseMolecule("Mg(OH)2"),
-  expected: {
-    Mg: 1,
-    O: 2,
-    H: 2,
-  },
-});
+// assertDeepEqual({
+//   actual: parseMolecule("H2O"),
+//   expected: {
+//     H: 2,
+//     O: 1,
+//   },
+// }); // ?
 
 // assertDeepEqual({
-//   actual: parseMolecule("K4[ON(SO 3)2]2"),
+//   actual: parseMolecule("Mg(OH)2"),
 //   expected: {
-//     K: 4,
-//     O: 14,
-//     N: 2,
-//     S: 4,
+//     Mg: 1,
+//     O: 2,
+//     H: 2,
 //   },
-// });
+// }); // ?
+
+assertDeepEqual({
+  actual: parseMolecule("K4[ON(SO 3)2]2"),
+  expected: {
+    K: 4,
+    O: 14,
+    N: 2,
+    S: 4,
+  },
+}); // ?
 
 // Difficult string to parse =>
 // K4[ON(SO 3)2]2
