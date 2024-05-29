@@ -4,7 +4,7 @@ type AssertEqual = {
 };
 
 export const assertEqual = ({ actual, expected }: AssertEqual) => {
-  if (JSON.stringify(actual) === JSON.stringify(expected)) {
+  if (actual === expected) {
     return `✅ ${actual} === ${expected}`;
   } else {
     return `❌ Failed: Expected ${expected}, but got ${actual}`;
