@@ -18,3 +18,13 @@ export const assertDeepEqual = ({ actual, expected }: AssertEqual) => {
     return `❌ Failed: Expected ${expected}, but got ${actual}`;
   }
 };
+
+type RunTests = {
+  tests: any[];
+  deep?: boolean;
+};
+
+export const runTests = ({ tests = [], deep = false }: RunTests) => {
+  const assert = deep ? assertDeepEqual : assertEqual;
+  return tests.map((test) => assert(test));
+};
