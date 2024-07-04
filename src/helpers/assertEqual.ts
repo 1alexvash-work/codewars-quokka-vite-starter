@@ -20,7 +20,7 @@ export const assertDeepEqual = ({ actual, expected }: AssertEqual) => {
 };
 
 type RunTests = {
-  tests: any[];
+  tests: AssertEqual[];
   deep?: boolean;
 };
 
