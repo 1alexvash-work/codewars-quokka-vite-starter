@@ -1,25 +1,47 @@
 // continue in here : https://www.codewars.com/kata/55e7280b40e1c4a06d0000aa/train/typescript
 
+import { assertEqual } from "./helpers/assertEqual";
+
 // It is a failure to translate a simple abstract problem of finding the biggest sum of k numbers from a given array not exceeding a threashold t, to a life problem. The first description only drives you away from understanding the simple problem.
 
-// Let's try to learn how to produce permutations with a sample 2 and 3 as this will allow me to understand how to generally create permutations + how work with dynamic combinations
+const getPairs = (arr: number[], k: number): number[][] => {
+  const n = arr.length;
+  const pairs: number[][] = [];
 
-import { assertEqual } from "./helpers/assertEqual";
+  const dfs = (start: number, path: number[]) => {
+    if (path.length === k) {
+      pairs.push(path.slice());
+
+      return;
+    }
+    for (let i = start; i < n; i++) {
+      path.push(arr[i]);
+
+      dfs(i + 1, path);
+
+      path.pop();
+    }
+  };
+
+  dfs(0, []);
+
+  return pairs;
+};
 
 export function chooseBestSum(
   threashold: number,
   setOfNumbers: number,
   numbers: number[]
 ): number | null {
-  // your code
+  const pairs = getPairs(numbers, setOfNumbers);
 
-  // const pairs
+  const pairsSum = pairs.map((pair) =>
+    pair.reduce((acc, curr) => acc + curr, 0)
+  );
 
-  // values
+  const sortedPairsSum = [...pairsSum].sort((a, b) => b - a);
 
-  // get the closest value
-
-  return null;
+  return sortedPairsSum.find((sum) => sum <= threashold) || null;
 }
 
 assertEqual({
