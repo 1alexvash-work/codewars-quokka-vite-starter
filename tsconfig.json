@@ -19,5 +19,5 @@
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true
   },
-  "include": ["src", "src/helpers/assertEqual.ts", "test/solution.test.js"]
+  "include": ["src", "src/helpers/assertEqual.ts"]
 }
