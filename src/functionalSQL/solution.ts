@@ -1,5 +1,7 @@
 import { assertDeepEqual } from "../helpers/assertEqual";
 
+// Work on the optional chaining order thing, as this thing is going to fuck me further down the line ❌
+
 class Query {
   select() {
     return this;
@@ -13,10 +15,8 @@ class Query {
     return numbers;
   }
 }
-
 const queryWrapper = () => new Query();
-
-const query = queryWrapper;
+export const query = queryWrapper;
 
 const numbers = [1, 2, 3];
 
