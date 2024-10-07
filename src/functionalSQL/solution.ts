@@ -1,26 +1,83 @@
-import { assertDeepEqual } from "../helpers/assertEqual";
+// import { assertDeepEqual } from "../helpers/assertEqual";
 
-// Work on the optional chaining order thing, as this thing is going to fuck me further down the line ❌
+// Work on implementing higher order chaining order ❌
+
+// TODO:
+// implement operationStack: ❌
+// implement reverse operationStack operation ❌
+// implement operationStack code execution ❌
+// also implement operation parameters preservation, for that I maybe will have to implement some version of shallow methods or what not ❌
+
+type Operation = {
+  name: string;
+  fn: () => void;
+};
 
 class Query {
-  select() {
+  operations: Operation[] = [];
+
+  operationA() {
+    console.log("operationA");
+    this.operations.push({ name: "A", fn: this.operationAReal });
+
     return this;
   }
 
-  from(x: number[]) {
+  operationB() {
+    console.log("operationB");
+    this.operations.push({ name: "B", fn: this.operationBReal });
+
     return this;
+  }
+
+  operationAReal() {
+    console.log("operationAReal");
+  }
+  operationBReal() {
+    console.log("operationBReal");
   }
 
   execute() {
-    return numbers;
+    const aOperations = this.operations.filter(
+      (operation) => operation.name === "A"
+    );
+    const bOperations = this.operations.filter(
+      (operation) => operation.name === "B"
+    );
+
+    const allOperations = [...aOperations, ...bOperations];
+
+    allOperations.forEach((operation) => {
+      operation.fn();
+    });
+
+    return "Finished";
   }
 }
 const queryWrapper = () => new Query();
 export const query = queryWrapper;
 
-const numbers = [1, 2, 3];
+query().operationA().operationB().operationA().execute(); // ?
 
-assertDeepEqual({
-  expected: query().select().from(numbers).execute(),
-  actual: numbers,
-}); // ?
+// class Query {
+//   select() {
+//     return this;
+//   }
+
+//   from(x: number[]) {
+//     return this;
+//   }
+
+//   execute() {
+//     return numbers;
+//   }
+// }
+// const queryWrapper = () => new Query();
+// export const query = queryWrapper;
+
+// const numbers = [1, 2, 3];
+
+// assertDeepEqual({
+//   expected: query().select().from(numbers).execute(),
+//   actual: numbers,
+// }); // ?
