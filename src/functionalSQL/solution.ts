@@ -2,25 +2,17 @@ import { assertDeepEqual } from "../helpers/assertEqual";
 
 type Operation = {
   name: string;
-  fn: () => void;
+  fn: (...args: any[]) => void;
   args: any[];
 };
 
 // Later Add validation for cases with invalid parameters flow
 
+// Later Add validation for all methods
+
 class Query {
   operations: Operation[] = [];
   result: any = [];
-
-  select(args?: any) {
-    this.operations.push({
-      name: "2",
-      fn: this.selectReal,
-      args,
-    });
-
-    return this;
-  }
 
   from(array: any[]) {
     this.operations.push({
@@ -34,7 +26,7 @@ class Query {
 
   where(args: any) {
     this.operations.push({
-      name: "3",
+      name: "2",
       fn: () => this.whereReal(args),
       args,
     });
@@ -42,7 +34,45 @@ class Query {
     return this;
   }
 
-  selectReal() {}
+  select(args?: any) {
+    this.operations.push({
+      name: "3",
+      fn: () => this.selectReal(args),
+      args,
+    });
+
+    return this;
+  }
+
+  groupBy(args: any) {
+    this.operations.push({
+      name: "4",
+      fn: () => this.groupByReal(args),
+      args,
+    });
+
+    return this;
+  }
+
+  having(args: any) {
+    this.operations.push({
+      name: "5",
+      fn: () => this.havingReal(args),
+      args,
+    });
+
+    return this;
+  }
+
+  orderBy(args: any) {
+    this.operations.push({
+      name: "6",
+      fn: () => this.orderByReal(args),
+      args,
+    });
+
+    return this;
+  }
 
   fromReal(array: number[]) {
     this.result = array;
@@ -50,15 +80,53 @@ class Query {
 
   whereReal(args: any) {}
 
+  selectReal(selectFunction: any) {
+    if (selectFunction === undefined) {
+      return;
+    }
+
+    this.result = this.result.map(selectFunction);
+  }
+
+  groupByReal(args: any) {}
+
+  havingReal(args: any) {}
+
+  orderByReal(args: any) {}
+
   execute() {
     const fromOperations = this.operations.filter(
       (operation) => operation.name === "1"
     );
-    const selectOperations = this.operations.filter(
+
+    const whereOperations = this.operations.filter(
       (operation) => operation.name === "2"
     );
 
-    const allOperations = [...fromOperations, ...selectOperations];
+    const selectOperations = this.operations.filter(
+      (operation) => operation.name === "3"
+    );
+
+    const groupByOperations = this.operations.filter(
+      (operation) => operation.name === "4"
+    );
+
+    const havingOperations = this.operations.filter(
+      (operation) => operation.name === "5"
+    );
+
+    const orderByOperations = this.operations.filter(
+      (operation) => operation.name === "6"
+    );
+
+    const allOperations = [
+      ...fromOperations,
+      ...whereOperations,
+      ...selectOperations,
+      ...groupByOperations,
+      ...havingOperations,
+      ...orderByOperations,
+    ];
 
     allOperations.forEach(({ fn }) => fn());
 
