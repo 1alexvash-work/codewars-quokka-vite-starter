@@ -20,99 +20,99 @@ describe("SQL tests", function () {
     );
   });
 
-  // it("Basic SELECT and WHERE over objects", () => {
-  //   var persons = [
-  //     {
-  //       name: "Peter",
-  //       profession: "teacher",
-  //       age: 20,
-  //       maritalStatus: "married",
-  //     },
-  //     {
-  //       name: "Michael",
-  //       profession: "teacher",
-  //       age: 50,
-  //       maritalStatus: "single",
-  //     },
-  //     {
-  //       name: "Peter",
-  //       profession: "teacher",
-  //       age: 20,
-  //       maritalStatus: "married",
-  //     },
-  //     {
-  //       name: "Anna",
-  //       profession: "scientific",
-  //       age: 20,
-  //       maritalStatus: "married",
-  //     },
-  //     {
-  //       name: "Rose",
-  //       profession: "scientific",
-  //       age: 50,
-  //       maritalStatus: "married",
-  //     },
-  //     {
-  //       name: "Anna",
-  //       profession: "scientific",
-  //       age: 20,
-  //       maritalStatus: "single",
-  //     },
-  //     {
-  //       name: "Anna",
-  //       profession: "politician",
-  //       age: 50,
-  //       maritalStatus: "married",
-  //     },
-  //   ];
+  it("Basic SELECT and WHERE over objects", () => {
+    var persons = [
+      {
+        name: "Peter",
+        profession: "teacher",
+        age: 20,
+        maritalStatus: "married",
+      },
+      {
+        name: "Michael",
+        profession: "teacher",
+        age: 50,
+        maritalStatus: "single",
+      },
+      {
+        name: "Peter",
+        profession: "teacher",
+        age: 20,
+        maritalStatus: "married",
+      },
+      {
+        name: "Anna",
+        profession: "scientific",
+        age: 20,
+        maritalStatus: "married",
+      },
+      {
+        name: "Rose",
+        profession: "scientific",
+        age: 50,
+        maritalStatus: "married",
+      },
+      {
+        name: "Anna",
+        profession: "scientific",
+        age: 20,
+        maritalStatus: "single",
+      },
+      {
+        name: "Anna",
+        profession: "politician",
+        age: 50,
+        maritalStatus: "married",
+      },
+    ];
 
-  //   expect(query().select().from(persons).execute()).to.deep.equal(persons);
+    expect(query().select().from(persons).execute()).to.deep.equal(persons);
 
-  //   function profession(person: any) {
-  //     return person.profession;
-  //   }
+    function profession(person: any) {
+      return person.profession;
+    }
 
-  //   // SELECT profession FROM persons
-  //   expect(query().select(profession).from(persons).execute()).to.deep.equal([
-  //     "teacher",
-  //     "teacher",
-  //     "teacher",
-  //     "scientific",
-  //     "scientific",
-  //     "scientific",
-  //     "politician",
-  //   ]);
-  //   expect(query().select(profession).execute()).to.deep.equal(
-  //     [],
-  //     "No FROM clause produces empty array"
-  //   );
+    // SELECT profession FROM persons
+    expect(query().select(profession).from(persons).execute()).to.deep.equal([
+      "teacher",
+      "teacher",
+      "teacher",
+      "scientific",
+      "scientific",
+      "scientific",
+      "politician",
+    ]);
+    expect(query().select(profession).execute()).to.deep.equal(
+      [],
+      "No FROM clause produces empty array"
+    );
 
-  //   function isTeacher(person: any) {
-  //     return person.profession === "teacher";
-  //   }
+    function isTeacher(person: any) {
+      return person.profession === "teacher";
+    }
 
-  //   // SELECT profession FROM persons WHERE profession="teacher"
-  //   expect(
-  //     query().select(profession).from(persons).where(isTeacher).execute()
-  //   ).to.deep.equal(["teacher", "teacher", "teacher"]);
+    // SELECT profession FROM persons WHERE profession="teacher"
+    expect(
+      query().select(profession).from(persons).where(isTeacher).execute()
+    ).to.deep.equal(["teacher", "teacher", "teacher"]);
 
-  //   // SELECT * FROM persons WHERE profession="teacher"
-  //   expect(query().from(persons).where(isTeacher).execute()).to.deep.equal(
-  //     persons.slice(0, 3)
-  //   );
+    // SELECT * FROM persons WHERE profession="teacher"
+    expect(query().from(persons).where(isTeacher).execute()).to.deep.equal(
+      persons.slice(0, 3)
+    );
 
-  //   function name(person: any) {
-  //     return person.name;
-  //   }
+    function name(person: any) {
+      return person.name;
+    }
 
-  //   // SELECT name FROM persons WHERE profession="teacher"
-  //   expect(
-  //     query().select(name).from(persons).where(isTeacher).execute()
-  //   ).to.deep.equal(["Peter", "Michael", "Peter"]);
-  //   expect(
-  //     query().where(isTeacher).from(persons).select(name).execute()
-  //   ).to.deep.equal(["Peter", "Michael", "Peter"]);
-  // });
+    // SELECT name FROM persons WHERE profession="teacher"
+    expect(
+      query().select(name).from(persons).where(isTeacher).execute()
+    ).to.deep.equal(["Peter", "Michael", "Peter"]);
+    expect(
+      query().where(isTeacher).from(persons).select(name).execute()
+    ).to.deep.equal(["Peter", "Michael", "Peter"]);
+  });
 
   // it("GROUP BY tests", () => {
   //   var persons = [

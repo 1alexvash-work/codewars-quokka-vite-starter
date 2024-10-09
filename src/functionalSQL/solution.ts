@@ -10,9 +10,9 @@ type Operation = {
 
 class Query {
   operations: Operation[] = [];
-  result: any[] = [];
+  result: any = [];
 
-  select(args: any[] = []) {
+  select(args?: any) {
     this.operations.push({
       name: "2",
       fn: this.selectReal,
@@ -22,7 +22,7 @@ class Query {
     return this;
   }
 
-  from(array: number[]) {
+  from(array: any[]) {
     this.operations.push({
       name: "1",
       fn: () => this.fromReal(array),
