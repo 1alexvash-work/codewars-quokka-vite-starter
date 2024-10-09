@@ -6,44 +6,55 @@ type Operation = {
   args: any[];
 };
 
+// Later Add validation for cases with invalid parameters flow
+
 class Query {
   operations: Operation[] = [];
+  result: any[] = [];
 
   select(args: any[] = []) {
-    this.operations.push({ name: "B", fn: this.selectReal, args });
+    this.operations.push({
+      name: "2",
+      fn: this.selectReal,
+      args,
+    });
 
     return this;
   }
 
-  from(x: number[]) {
-    this.operations.push({ name: "A", fn: () => this.fromReal(x), args: x });
+  from(array: number[]) {
+    this.operations.push({
+      name: "1",
+      fn: () => this.fromReal(array),
+      args: array,
+    });
 
     return this;
   }
 
   selectReal() {}
 
-  fromReal(x: number[]) {}
+  fromReal(array: number[]) {
+    this.result = array;
+  }
 
   execute() {
     const fromOperations = this.operations.filter(
-      (operation) => operation.name === "A"
+      (operation) => operation.name === "1"
     );
     const selectOperations = this.operations.filter(
-      (operation) => operation.name === "B"
+      (operation) => operation.name === "2"
     );
 
     const allOperations = [...fromOperations, ...selectOperations];
 
     allOperations.forEach(({ fn }) => fn());
 
-    return numbers;
+    return this.result;
   }
 }
 const queryWrapper = () => new Query();
 export const query = queryWrapper;
-
-// query().operationA([1, 2, 3]).operationB().operationA().execute(); // ?
 
 const numbers = [1, 2, 3];
 
