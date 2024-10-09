@@ -1,83 +1,53 @@
-// import { assertDeepEqual } from "../helpers/assertEqual";
-
-// Work on implementing higher order chaining order ❌
-
-// TODO:
-// implement operationStack: ❌
-// implement reverse operationStack operation ❌
-// implement operationStack code execution ❌
-// also implement operation parameters preservation, for that I maybe will have to implement some version of shallow methods or what not ❌
+import { assertDeepEqual } from "../helpers/assertEqual";
 
 type Operation = {
   name: string;
   fn: () => void;
+  args: any[];
 };
 
 class Query {
   operations: Operation[] = [];
 
-  operationA() {
-    console.log("operationA");
-    this.operations.push({ name: "A", fn: this.operationAReal });
+  select(args: any[] = []) {
+    this.operations.push({ name: "B", fn: this.selectReal, args });
 
     return this;
   }
 
-  operationB() {
-    console.log("operationB");
-    this.operations.push({ name: "B", fn: this.operationBReal });
+  from(x: number[]) {
+    this.operations.push({ name: "A", fn: () => this.fromReal(x), args: x });
 
     return this;
   }
 
-  operationAReal() {
-    console.log("operationAReal");
-  }
-  operationBReal() {
-    console.log("operationBReal");
-  }
+  selectReal() {}
+
+  fromReal(x: number[]) {}
 
   execute() {
-    const aOperations = this.operations.filter(
+    const fromOperations = this.operations.filter(
       (operation) => operation.name === "A"
     );
-    const bOperations = this.operations.filter(
+    const selectOperations = this.operations.filter(
       (operation) => operation.name === "B"
     );
 
-    const allOperations = [...aOperations, ...bOperations];
+    const allOperations = [...fromOperations, ...selectOperations];
 
-    allOperations.forEach((operation) => {
-      operation.fn();
-    });
+    allOperations.forEach(({ fn }) => fn());
 
-    return "Finished";
+    return numbers;
   }
 }
 const queryWrapper = () => new Query();
 export const query = queryWrapper;
 
-query().operationA().operationB().operationA().execute(); // ?
+// query().operationA([1, 2, 3]).operationB().operationA().execute(); // ?
 
-// class Query {
-//   select() {
-//     return this;
-//   }
+const numbers = [1, 2, 3];
 
-//   from(x: number[]) {
-//     return this;
-//   }
-
-//   execute() {
-//     return numbers;
-//   }
-// }
-// const queryWrapper = () => new Query();
-// export const query = queryWrapper;
-
-// const numbers = [1, 2, 3];
-
-// assertDeepEqual({
-//   expected: query().select().from(numbers).execute(),
-//   actual: numbers,
-// }); // ?
+assertDeepEqual({
+  expected: query().select().from(numbers).execute(),
+  actual: numbers,
+}); // ?
