@@ -32,11 +32,23 @@ class Query {
     return this;
   }
 
+  where(args: any) {
+    this.operations.push({
+      name: "3",
+      fn: () => this.whereReal(args),
+      args,
+    });
+
+    return this;
+  }
+
   selectReal() {}
 
   fromReal(array: number[]) {
     this.result = array;
   }
+
+  whereReal(args: any) {}
 
   execute() {
     const fromOperations = this.operations.filter(
