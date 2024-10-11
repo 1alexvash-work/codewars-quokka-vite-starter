@@ -39,29 +39,30 @@ class Query {
     return this;
   }
 
-  select(args?: any) {
-    this.operations.push({
-      name: "3",
-      fn: () => this.selectReal(args),
-      args,
-    });
-
-    return this;
-  }
-
   groupBy(args: any) {
     this.operations.push({
-      name: "4",
+      name: "3",
       fn: () => this.groupByReal(args),
       args,
     });
+
     return this;
   }
 
   having(args: any) {
     this.operations.push({
-      name: "5",
+      name: "4",
       fn: () => this.havingReal(args),
+      args,
+    });
+
+    return this;
+  }
+
+  select(args?: any) {
+    this.operations.push({
+      name: "5",
+      fn: () => this.selectReal(args),
       args,
     });
 
@@ -90,14 +91,6 @@ class Query {
     this.result = this.result.filter(whereFunction);
   }
 
-  selectReal(selectFunction: any) {
-    if (selectFunction === undefined) {
-      return;
-    }
-
-    this.result = this.result.map(selectFunction);
-  }
-
   groupByReal(args: any) {
     if (args === undefined) {
       return;
@@ -120,6 +113,14 @@ class Query {
 
   havingReal(args: any) {
     console.log("havingReal", args);
+  }
+
+  selectReal(selectFunction: any) {
+    if (selectFunction === undefined) {
+      return;
+    }
+
+    this.result = this.result.map(selectFunction);
   }
 
   orderByReal(args: any) {
