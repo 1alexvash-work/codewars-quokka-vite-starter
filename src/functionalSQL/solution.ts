@@ -1,4 +1,9 @@
+// Read the description the second time around, I think the next time it'll make morre sense, on where I am right now, on what I have implement and what's lacking behind
+
 import { assertDeepEqual } from "../helpers/assertEqual";
+
+// Grouping implemented, yes
+// Multi level grouping, no
 
 type Operation = {
   name: string;
@@ -50,7 +55,6 @@ class Query {
       fn: () => this.groupByReal(args),
       args,
     });
-
     return this;
   }
 
@@ -78,7 +82,13 @@ class Query {
     this.result = array;
   }
 
-  whereReal(args: any) {}
+  whereReal(whereFunction: any) {
+    if (whereFunction === undefined) {
+      return;
+    }
+
+    this.result = this.result.filter(whereFunction);
+  }
 
   selectReal(selectFunction: any) {
     if (selectFunction === undefined) {
@@ -88,11 +98,33 @@ class Query {
     this.result = this.result.map(selectFunction);
   }
 
-  groupByReal(args: any) {}
+  groupByReal(args: any) {
+    if (args === undefined) {
+      return;
+    }
 
-  havingReal(args: any) {}
+    this.result = this.result.reduce((acc: any, item: any) => {
+      const key = args(item);
+      acc[key] = acc[key] || [];
+      acc[key].push(item);
+      return acc;
+    }, {});
 
-  orderByReal(args: any) {}
+    const groups = Object.entries(this.result).map(([key, value]) => [
+      key,
+      value,
+    ]);
+
+    this.result = groups;
+  }
+
+  havingReal(args: any) {
+    console.log("havingReal", args);
+  }
+
+  orderByReal(args: any) {
+    console.log("orderByReal", args);
+  }
 
   execute() {
     const fromOperations = this.operations.filter(
@@ -135,10 +167,3 @@ class Query {
 }
 const queryWrapper = () => new Query();
 export const query = queryWrapper;
-
-const numbers = [1, 2, 3];
-
-assertDeepEqual({
-  expected: query().select().from(numbers).execute(),
-  actual: numbers,
-}); // ?
