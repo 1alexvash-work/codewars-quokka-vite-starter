@@ -166,8 +166,155 @@ class Query {
 
     allOperations.forEach(({ fn }) => fn());
 
+    console.log("actual result", this.result);
+
     return this.result;
   }
 }
 const queryWrapper = () => new Query();
 export const query = queryWrapper;
+
+var persons = [
+  {
+    name: "Peter",
+    profession: "teacher",
+    age: 20,
+    maritalStatus: "married",
+  },
+  {
+    name: "Michael",
+    profession: "teacher",
+    age: 50,
+    maritalStatus: "single",
+  },
+  {
+    name: "Peter",
+    profession: "teacher",
+    age: 20,
+    maritalStatus: "married",
+  },
+  {
+    name: "Anna",
+    profession: "scientific",
+    age: 20,
+    maritalStatus: "married",
+  },
+  {
+    name: "Rose",
+    profession: "scientific",
+    age: 50,
+    maritalStatus: "married",
+  },
+  {
+    name: "Anna",
+    profession: "scientific",
+    age: 20,
+    maritalStatus: "single",
+  },
+  {
+    name: "Anna",
+    profession: "politician",
+    age: 50,
+    maritalStatus: "married",
+  },
+];
+
+const expected = [
+  [
+    "teacher",
+    [
+      [
+        "Peter",
+        [
+          {
+            name: "Peter",
+            profession: "teacher",
+            age: 20,
+            maritalStatus: "married",
+          },
+          {
+            name: "Peter",
+            profession: "teacher",
+            age: 20,
+            maritalStatus: "married",
+          },
+        ],
+      ],
+      [
+        "Michael",
+        [
+          {
+            name: "Michael",
+            profession: "teacher",
+            age: 50,
+            maritalStatus: "single",
+          },
+        ],
+      ],
+    ],
+  ],
+  [
+    "scientific",
+    [
+      [
+        "Anna",
+        [
+          {
+            name: "Anna",
+            profession: "scientific",
+            age: 20,
+            maritalStatus: "married",
+          },
+          {
+            name: "Anna",
+            profession: "scientific",
+            age: 20,
+            maritalStatus: "single",
+          },
+        ],
+      ],
+      [
+        "Rose",
+        [
+          {
+            name: "Rose",
+            profession: "scientific",
+            age: 50,
+            maritalStatus: "married",
+          },
+        ],
+      ],
+    ],
+  ],
+  [
+    "politician",
+    [
+      [
+        "Anna",
+        [
+          {
+            name: "Anna",
+            profession: "politician",
+            age: 50,
+            maritalStatus: "married",
+          },
+        ],
+      ],
+    ],
+  ],
+];
+
+console.log("expected:", expected);
+
+assertDeepEqual({
+  actual: query().select().from(persons).groupBy(profession, name).execute(),
+  expected,
+}); // ?
+
+function profession(person: any) {
+  return person.profession;
+}
+
+function name(person: any) {
+  return person.name;
+}
