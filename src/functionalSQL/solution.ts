@@ -1,4 +1,11 @@
-// Read the description the second time around, I think the next time it'll make morre sense, on where I am right now, on what I have implement and what's lacking behind
+/*
+🖋️ Cases to handle:
+- groupBy add support for multiple levels of grouping ❌
+- Add having method ❌
+- Add orderBy method ❌
+- From method support multiple source of information ❌ (this query looks potentially a bit complicated)
+- Also, it looks like where and having have some advanced query case❌
+*/
 
 import { assertDeepEqual } from "../helpers/assertEqual";
 
@@ -10,10 +17,6 @@ type Operation = {
   fn: (...args: any[]) => void;
   args: any[];
 };
-
-// Later Add validation for cases with invalid parameters flow
-
-// Later Add validation for all methods
 
 class Query {
   operations: Operation[] = [];
@@ -39,7 +42,7 @@ class Query {
     return this;
   }
 
-  groupBy(args: any) {
+  groupBy(...args: any) {
     this.operations.push({
       name: "3",
       fn: () => this.groupByReal(args),
