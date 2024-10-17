@@ -118,12 +118,23 @@ class Query {
     console.log("havingReal", args);
   }
 
+  // TODO: it looks like selectReal works differently when it is followed by groupByReal
   selectReal(selectFunction: any) {
     if (selectFunction === undefined) {
       return;
     }
 
+    const queryContaintsGroupBy = this.operations.some(
+      (operation) => operation.name === "3"
+    );
+
+    if (queryContaintsGroupBy) {
+      // something
+
+      console.log("Do something about it");
+    } else {
     this.result = this.result.map(selectFunction);
+    }
   }
 
   orderByReal(args: any) {
