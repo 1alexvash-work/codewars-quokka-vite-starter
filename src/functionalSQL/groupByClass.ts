@@ -1,4 +1,16 @@
-class DataGrouper {
+/*
+
+TODO:
+1) Create a helper to reset structure differently ❌
+2) Update data structure to the one from the test case ✅
+3) Attributes are passed as strings, when they should be functions ❌
+(Look up whether it has any importance)
+
+*/
+
+import { assertDeepEqual } from "../helpers/assertEqual";
+
+class GroupByClass {
   private data: any[];
 
   constructor(data: any[]) {
@@ -26,7 +38,7 @@ class DataGrouper {
 
     // Recursively group the inner data by remaining fields
     for (let key in groupedData) {
-      const subgroup = new DataGrouper(groupedData[key]); // Create a new instance for recursion
+      const subgroup = new GroupByClass(groupedData[key]); // Create a new instance for recursion
       groupedData[key] = subgroup.groupBy(...fields.slice(1));
     }
 
@@ -34,24 +46,149 @@ class DataGrouper {
   }
 }
 
-const data = [
-  { name: "John", profession: "Engineer", country: "USA" },
-  { name: "Jane", profession: "Doctor", country: "Canada" },
-  { name: "Mike", profession: "Engineer", country: "Canada" },
+var persons = [
+  {
+    name: "Peter",
+    profession: "teacher",
+    age: 20,
+    maritalStatus: "married",
+  },
+  {
+    name: "Michael",
+    profession: "teacher",
+    age: 50,
+    maritalStatus: "single",
+  },
+  {
+    name: "Peter",
+    profession: "teacher",
+    age: 20,
+    maritalStatus: "married",
+  },
+  {
+    name: "Anna",
+    profession: "scientific",
+    age: 20,
+    maritalStatus: "married",
+  },
+  {
+    name: "Rose",
+    profession: "scientific",
+    age: 50,
+    maritalStatus: "married",
+  },
+  {
+    name: "Anna",
+    profession: "scientific",
+    age: 20,
+    maritalStatus: "single",
+  },
+  {
+    name: "Anna",
+    profession: "politician",
+    age: 50,
+    maritalStatus: "married",
+  },
 ];
 
-const grouper = new DataGrouper(data);
-const result = grouper.groupBy("profession", "country");
-console.log(result);
+const actual = new GroupByClass(persons).groupBy("profession", "name");
 
-const users = [
-  { profession: "teacher", name: "Jake" },
-  { profession: "teacher", name: "Jennifer" },
-  { profession: "firefighter", name: "Mike" },
-  { profession: "engineer", name: "Alice" },
-  { profession: "firefighter", name: "John" },
+const expected = [
+  [
+    "teacher",
+    [
+      [
+        "Peter",
+        [
+          {
+            name: "Peter",
+            profession: "teacher",
+            age: 20,
+            maritalStatus: "married",
+          },
+          {
+            name: "Peter",
+            profession: "teacher",
+            age: 20,
+            maritalStatus: "married",
+          },
+        ],
+      ],
+      [
+        "Michael",
+        [
+          {
+            name: "Michael",
+            profession: "teacher",
+            age: 50,
+            maritalStatus: "single",
+          },
+        ],
+      ],
+    ],
+  ],
+  [
+    "scientific",
+    [
+      [
+        "Anna",
+        [
+          {
+            name: "Anna",
+            profession: "scientific",
+            age: 20,
+            maritalStatus: "married",
+          },
+          {
+            name: "Anna",
+            profession: "scientific",
+            age: 20,
+            maritalStatus: "single",
+          },
+        ],
+      ],
+      [
+        "Rose",
+        [
+          {
+            name: "Rose",
+            profession: "scientific",
+            age: 50,
+            maritalStatus: "married",
+          },
+        ],
+      ],
+    ],
+  ],
+  [
+    "politician",
+    [
+      [
+        "Anna",
+        [
+          {
+            name: "Anna",
+            profession: "politician",
+            age: 50,
+            maritalStatus: "married",
+          },
+        ],
+      ],
+    ],
+  ],
 ];
 
-const grouper2 = new DataGrouper(users);
-const result2 = grouper2.groupBy("profession", "name");
-console.log("result2:", result2);
+console.log({
+  actual,
+  expected,
+}); // ?
+
+// assertDeepEqual({ actual, expected }); // ?
+
+// function profession(person: any) {
+//   return person.profession;
+// }
+
+// function name(person: any) {
+//   return person.name;
+// }
