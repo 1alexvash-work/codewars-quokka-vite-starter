@@ -58,6 +58,15 @@ class GroupBy {
   }
 }
 
+const convertToObjectEntries = (object: any): any => {
+  return Object.entries(object).map(([key, value]: any) => {
+    if (typeof value === "object" && !Array.isArray(value)) {
+      return [key, convertToObjectEntries(value)];
+    }
+    return [key, value];
+  });
+};
+
 class Query {
   operations: Operation[] = [];
   result: any = [];
@@ -137,7 +146,7 @@ class Query {
   groupByReal(args: any) {
     const groupBy = new GroupBy(this.result).groupBy(...args);
 
-    this.result = groupBy;
+    this.result = convertToObjectEntries(groupBy);
   }
 
   havingReal(args: any) {
@@ -344,8 +353,6 @@ const expected = [
     ],
   ],
 ];
-
-console.log("expected:", expected);
 
 assertDeepEqual({
   actual: query().select().from(persons).groupBy(profession, name).execute(),
