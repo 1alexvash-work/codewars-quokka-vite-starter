@@ -24,20 +24,21 @@ class GroupByClass {
 
     // Group data by the current field
     const functionField = functionFields[0]; // Take the first field
+
     const groupedData: {
       [key: string]: any;
     } = {};
 
     this.data.forEach((item: any) => {
-      // * A little bit of hack to extract the function filtering key
-      const key = item[functionField.name]; // Get the value of the field (e.g., profession)
-      if (!groupedData[key]) {
-        groupedData[key] = []; // Initialize an empty array for the group
-      }
+      // * A little bit of hack to extract the function filtering key (maybe not)
+      const key = item[functionField.name]; // 🗝 Get the value of the field (e.g., profession)
+
+      if (!groupedData[key]) groupedData[key] = []; // Initialize an empty array for the group
+
       groupedData[key].push(item); // Push the item into the group
     });
 
-    // Recursively group the inner data by remaining fields
+    // ♾ Recursively group the inner data by remaining fields
     for (let key in groupedData) {
       const subgroup = new GroupByClass(groupedData[key]); // Create a new instance for recursion
       groupedData[key] = subgroup.groupBy(...functionFields.slice(1));
