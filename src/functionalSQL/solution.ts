@@ -7,8 +7,6 @@
 - Also, it looks like where and having have some advanced query case❌
 */
 
-import { assertDeepEqual } from "../helpers/assertEqual";
-
 type Operation = {
   name: string;
   fn: (...args: any[]) => void;
@@ -62,7 +60,7 @@ const convertToObjectEntries = (object: any): any => {
   });
 };
 
-class Query {
+export class Query {
   operations: Operation[] = [];
   result: any = [];
 

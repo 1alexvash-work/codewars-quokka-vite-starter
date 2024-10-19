@@ -367,152 +367,152 @@ describe("SQL tests", function () {
     function maritalStatus(person: any) {
       return person.maritalStatus;
     }
-    //   // SELECT * FROM persons WHERE profession='teacher' GROUPBY profession, name, age
-    //   expect(
-    //     query()
-    //       .select()
-    //       .from(persons)
-    //       .groupBy(profession, name, age, maritalStatus)
-    //       .execute()
-    //   ).to.deep.equal([
-    //     [
-    //       "teacher",
-    //       [
-    //         [
-    //           "Peter",
-    //           [
-    //             [
-    //               20,
-    //               [
-    //                 [
-    //                   "married",
-    //                   [
-    //                     {
-    //                       name: "Peter",
-    //                       profession: "teacher",
-    //                       age: 20,
-    //                       maritalStatus: "married",
-    //                     },
-    //                     {
-    //                       name: "Peter",
-    //                       profession: "teacher",
-    //                       age: 20,
-    //                       maritalStatus: "married",
-    //                     },
-    //                   ],
-    //                 ],
-    //               ],
-    //             ],
-    //           ],
-    //         ],
-    //         [
-    //           "Michael",
-    //           [
-    //             [
-    //               50,
-    //               [
-    //                 [
-    //                   "single",
-    //                   [
-    //                     {
-    //                       name: "Michael",
-    //                       profession: "teacher",
-    //                       age: 50,
-    //                       maritalStatus: "single",
-    //                     },
-    //                   ],
-    //                 ],
-    //               ],
-    //             ],
-    //           ],
-    //         ],
-    //       ],
-    //     ],
-    //     [
-    //       "scientific",
-    //       [
-    //         [
-    //           "Anna",
-    //           [
-    //             [
-    //               20,
-    //               [
-    //                 [
-    //                   "married",
-    //                   [
-    //                     {
-    //                       name: "Anna",
-    //                       profession: "scientific",
-    //                       age: 20,
-    //                       maritalStatus: "married",
-    //                     },
-    //                   ],
-    //                 ],
-    //                 [
-    //                   "single",
-    //                   [
-    //                     {
-    //                       name: "Anna",
-    //                       profession: "scientific",
-    //                       age: 20,
-    //                       maritalStatus: "single",
-    //                     },
-    //                   ],
-    //                 ],
-    //               ],
-    //             ],
-    //           ],
-    //         ],
-    //         [
-    //           "Rose",
-    //           [
-    //             [
-    //               50,
-    //               [
-    //                 [
-    //                   "married",
-    //                   [
-    //                     {
-    //                       name: "Rose",
-    //                       profession: "scientific",
-    //                       age: 50,
-    //                       maritalStatus: "married",
-    //                     },
-    //                   ],
-    //                 ],
-    //               ],
-    //             ],
-    //           ],
-    //         ],
-    //       ],
-    //     ],
-    //     [
-    //       "politician",
-    //       [
-    //         [
-    //           "Anna",
-    //           [
-    //             [
-    //               50,
-    //               [
-    //                 [
-    //                   "married",
-    //                   [
-    //                     {
-    //                       name: "Anna",
-    //                       profession: "politician",
-    //                       age: 50,
-    //                       maritalStatus: "married",
-    //                     },
-    //                   ],
-    //                 ],
-    //               ],
-    //             ],
-    //           ],
-    //         ],
-    //       ],
-    //     ],
-    //   ]);
+    // SELECT * FROM persons WHERE profession='teacher' GROUPBY profession, name, age
+    expect(
+      query()
+        .select()
+        .from(persons)
+        .groupBy(profession, name, age, maritalStatus)
+        .execute()
+    ).to.deep.equal([
+      [
+        "teacher",
+        [
+          [
+            "Peter",
+            [
+              [
+                20,
+                [
+                  [
+                    "married",
+                    [
+                      {
+                        name: "Peter",
+                        profession: "teacher",
+                        age: 20,
+                        maritalStatus: "married",
+                      },
+                      {
+                        name: "Peter",
+                        profession: "teacher",
+                        age: 20,
+                        maritalStatus: "married",
+                      },
+                    ],
+                  ],
+                ],
+              ],
+            ],
+          ],
+          [
+            "Michael",
+            [
+              [
+                50,
+                [
+                  [
+                    "single",
+                    [
+                      {
+                        name: "Michael",
+                        profession: "teacher",
+                        age: 50,
+                        maritalStatus: "single",
+                      },
+                    ],
+                  ],
+                ],
+              ],
+            ],
+          ],
+        ],
+      ],
+      [
+        "scientific",
+        [
+          [
+            "Anna",
+            [
+              [
+                20,
+                [
+                  [
+                    "married",
+                    [
+                      {
+                        name: "Anna",
+                        profession: "scientific",
+                        age: 20,
+                        maritalStatus: "married",
+                      },
+                    ],
+                  ],
+                  [
+                    "single",
+                    [
+                      {
+                        name: "Anna",
+                        profession: "scientific",
+                        age: 20,
+                        maritalStatus: "single",
+                      },
+                    ],
+                  ],
+                ],
+              ],
+            ],
+          ],
+          [
+            "Rose",
+            [
+              [
+                50,
+                [
+                  [
+                    "married",
+                    [
+                      {
+                        name: "Rose",
+                        profession: "scientific",
+                        age: 50,
+                        maritalStatus: "married",
+                      },
+                    ],
+                  ],
+                ],
+              ],
+            ],
+          ],
+        ],
+      ],
+      [
+        "politician",
+        [
+          [
+            "Anna",
+            [
+              [
+                50,
+                [
+                  [
+                    "married",
+                    [
+                      {
+                        name: "Anna",
+                        profession: "politician",
+                        age: 50,
+                        maritalStatus: "married",
+                      },
+                    ],
+                  ],
+                ],
+              ],
+            ],
+          ],
+        ],
+      ],
+    ]);
     function professionCount(group: any) {
       return [group[0], group[1].length];
     }
