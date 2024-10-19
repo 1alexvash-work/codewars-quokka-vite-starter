@@ -164,9 +164,7 @@ class Query {
     );
 
     if (queryContaintsGroupBy) {
-      // something
-
-      console.log("Do something about it");
+      this.result = this.result.map((group: any) => selectFunction(group));
     } else {
       this.result = this.result.map(selectFunction);
     }
@@ -263,106 +261,21 @@ var persons = [
   },
 ];
 
-const actual = query()
-  .select()
-  .from(persons)
-  .groupBy(profession, name)
-  .execute();
-
-const expected = [
-  [
-    "teacher",
-    [
-      [
-        "Peter",
-        [
-          {
-            name: "Peter",
-            profession: "teacher",
-            age: 20,
-            maritalStatus: "married",
-          },
-          {
-            name: "Peter",
-            profession: "teacher",
-            age: 20,
-            maritalStatus: "married",
-          },
-        ],
-      ],
-      [
-        "Michael",
-        [
-          {
-            name: "Michael",
-            profession: "teacher",
-            age: 50,
-            maritalStatus: "single",
-          },
-        ],
-      ],
-    ],
-  ],
-  [
-    "scientific",
-    [
-      [
-        "Anna",
-        [
-          {
-            name: "Anna",
-            profession: "scientific",
-            age: 20,
-            maritalStatus: "married",
-          },
-          {
-            name: "Anna",
-            profession: "scientific",
-            age: 20,
-            maritalStatus: "single",
-          },
-        ],
-      ],
-      [
-        "Rose",
-        [
-          {
-            name: "Rose",
-            profession: "scientific",
-            age: 50,
-            maritalStatus: "married",
-          },
-        ],
-      ],
-    ],
-  ],
-  [
-    "politician",
-    [
-      [
-        "Anna",
-        [
-          {
-            name: "Anna",
-            profession: "politician",
-            age: 50,
-            maritalStatus: "married",
-          },
-        ],
-      ],
-    ],
-  ],
-];
-
-assertDeepEqual({
-  actual: query().select().from(persons).groupBy(profession, name).execute(),
-  expected,
-}); // ?
+function professionGroup(group: any) {
+  return group[0];
+}
 
 function profession(person: any) {
   return person.profession;
 }
 
-function name(person: any) {
-  return person.name;
-}
+const actual = query()
+  .select(professionGroup)
+  .from(persons)
+  .groupBy(profession)
+  .execute();
+
+assertDeepEqual({
+  actual,
+  expected: ["teacher", "scientific", "politician"],
+}); // ?
