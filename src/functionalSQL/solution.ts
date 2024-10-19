@@ -7,6 +7,8 @@
 - Also, it looks like where and having have some advanced query case❌
 */
 
+import { assertDeepEqual } from "../helpers/assertEqual";
+
 type Operation = {
   name: string;
   fn: (...args: any[]) => void;
@@ -33,8 +35,7 @@ class GroupBy {
     } = {};
 
     this.data.forEach((item: any) => {
-      // * A little bit of hack to extract the function filtering key (maybe not)
-      const key = item[functionField.name]; // 🗝 Get the value of the field (e.g., profession)
+      const key = functionField(item); // 🗝 Get the value of the field (e.g., profession)
 
       if (!groupedData[key]) groupedData[key] = []; // Initialize an empty array for the group
 
