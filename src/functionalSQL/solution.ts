@@ -53,9 +53,14 @@ class GroupBy {
 
 const convertToObjectEntries = (object: any): any => {
   return Object.entries(object).map(([key, value]: any) => {
+    const keyIsNumber = !isNaN(Number(key));
+
+    if (keyIsNumber) key = Number(key);
+
     if (typeof value === "object" && !Array.isArray(value)) {
       return [key, convertToObjectEntries(value)];
     }
+
     return [key, value];
   });
 };
