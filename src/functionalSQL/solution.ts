@@ -149,7 +149,11 @@ export class Query {
   }
 
   havingReal(args: any) {
-    console.log("havingReal", args);
+    if (args === undefined) {
+      return;
+    }
+
+    this.result = this.result.filter(args);
   }
 
   // TODO: it looks like selectReal works differently when it is followed by groupByReal
