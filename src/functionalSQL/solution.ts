@@ -131,7 +131,7 @@ export class Query {
   }
 
   fromReal(array: number[]) {
-    this.result = array;
+    this.result = [...array];
   }
 
   whereReal(...whereFunction: any) {
@@ -226,21 +226,3 @@ const queryWrapper = () => new Query();
 export const query = queryWrapper;
 
 ///////////////////////////////////////// TESTS ⬇⬇⬇
-
-var numbers = [1, 2, 3, 4, 5, 6, 7, 8, 9];
-
-function lessThan3(number: number) {
-  return number < 3;
-}
-
-function greaterThan4(number: number) {
-  return number > 4;
-}
-
-const actual = query()
-  .select()
-  .from(numbers)
-  .where(lessThan3, greaterThan4)
-  .execute();
-
-console.log("actual:", actual);
