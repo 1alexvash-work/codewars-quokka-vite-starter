@@ -80,10 +80,10 @@ export class Query {
     return this;
   }
 
-  where(args: any) {
+  where(...args: any) {
     this.operations.push({
       name: "2",
-      fn: () => this.whereReal(args),
+      fn: () => this.whereReal(...args),
       args,
     });
 
@@ -134,12 +134,18 @@ export class Query {
     this.result = array;
   }
 
-  whereReal(whereFunction: any) {
+  whereReal(...whereFunction: any) {
     if (whereFunction === undefined) {
       return;
     }
 
-    this.result = this.result.filter(whereFunction);
+    const result: any = [];
+
+    whereFunction.forEach((fn: any) => {
+      result.push(...this.result.filter(fn));
+    });
+
+    this.result = result;
   }
 
   groupByReal(args: any) {
@@ -218,3 +224,23 @@ export class Query {
 }
 const queryWrapper = () => new Query();
 export const query = queryWrapper;
+
+///////////////////////////////////////// TESTS ⬇⬇⬇
+
+var numbers = [1, 2, 3, 4, 5, 6, 7, 8, 9];
+
+function lessThan3(number: number) {
+  return number < 3;
+}
+
+function greaterThan4(number: number) {
+  return number > 4;
+}
+
+const actual = query()
+  .select()
+  .from(numbers)
+  .where(lessThan3, greaterThan4)
+  .execute();
+
+console.log("actual:", actual);
