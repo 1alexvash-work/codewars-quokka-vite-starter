@@ -1,18 +1,13 @@
 /*
 🖋️ Cases to handle:
-- groupBy add support for multiple levels of grouping ❌
+- groupBy add support for multiple levels of grouping ✅
 - Add having method ❌
-- Add orderBy method ❌
+- Add orderBy method ✅
 - From method support multiple source of information ❌ (this query looks potentially a bit complicated)
 - Also, it looks like where and having have some advanced query case❌
 */
 
-// Create a helper to reset groupBy structure entirerly like in the example ❌
-
 import { assertDeepEqual } from "../helpers/assertEqual";
-
-// Grouping implemented, ✅
-// Multi level grouping, ✅
 
 type Operation = {
   name: string;
@@ -171,7 +166,7 @@ class Query {
   }
 
   orderByReal(args: any) {
-    console.log("orderByReal", args);
+    this.result = this.result.sort(args);
   }
 
   execute() {
@@ -215,67 +210,3 @@ class Query {
 }
 const queryWrapper = () => new Query();
 export const query = queryWrapper;
-
-var persons = [
-  {
-    name: "Peter",
-    profession: "teacher",
-    age: 20,
-    maritalStatus: "married",
-  },
-  {
-    name: "Michael",
-    profession: "teacher",
-    age: 50,
-    maritalStatus: "single",
-  },
-  {
-    name: "Peter",
-    profession: "teacher",
-    age: 20,
-    maritalStatus: "married",
-  },
-  {
-    name: "Anna",
-    profession: "scientific",
-    age: 20,
-    maritalStatus: "married",
-  },
-  {
-    name: "Rose",
-    profession: "scientific",
-    age: 50,
-    maritalStatus: "married",
-  },
-  {
-    name: "Anna",
-    profession: "scientific",
-    age: 20,
-    maritalStatus: "single",
-  },
-  {
-    name: "Anna",
-    profession: "politician",
-    age: 50,
-    maritalStatus: "married",
-  },
-];
-
-function professionGroup(group: any) {
-  return group[0];
-}
-
-function profession(person: any) {
-  return person.profession;
-}
-
-const actual = query()
-  .select(professionGroup)
-  .from(persons)
-  .groupBy(profession)
-  .execute();
-
-assertDeepEqual({
-  actual,
-  expected: ["teacher", "scientific", "politician"],
-}); // ?

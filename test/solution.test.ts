@@ -361,12 +361,12 @@ describe("SQL tests", function () {
         ],
       ],
     ]);
-    // function age(person: any) {
-    //   return person.age;
-    // }
-    // function maritalStatus(person: any) {
-    //   return person.maritalStatus;
-    // }
+    function age(person: any) {
+      return person.age;
+    }
+    function maritalStatus(person: any) {
+      return person.maritalStatus;
+    }
     //   // SELECT * FROM persons WHERE profession='teacher' GROUPBY profession, name, age
     //   expect(
     //     query()
@@ -513,43 +513,43 @@ describe("SQL tests", function () {
     //       ],
     //     ],
     //   ]);
-    //   function professionCount(group: any) {
-    //     return [group[0], group[1].length];
-    //   }
+    function professionCount(group: any) {
+      return [group[0], group[1].length];
+    }
     //   // SELECT profession, count(profession) FROM persons GROUPBY profession
-    //   expect(
-    //     query()
-    //       .select(professionCount)
-    //       .from(persons)
-    //       .groupBy(profession)
-    //       .execute()
-    //   ).to.deep.equal([
-    //     ["teacher", 3],
-    //     ["scientific", 3],
-    //     ["politician", 1],
-    //   ]);
-    //   function naturalCompare(value1: any, value2: any) {
-    //     if (value1 < value2) {
-    //       return -1;
-    //     } else if (value1 > value2) {
-    //       return 1;
-    //     } else {
-    //       return 0;
-    //     }
-    //   }
+    expect(
+      query()
+        .select(professionCount)
+        .from(persons)
+        .groupBy(profession)
+        .execute()
+    ).to.deep.equal([
+      ["teacher", 3],
+      ["scientific", 3],
+      ["politician", 1],
+    ]);
+    function naturalCompare(value1: any, value2: any) {
+      if (value1 < value2) {
+        return -1;
+      } else if (value1 > value2) {
+        return 1;
+      } else {
+        return 0;
+      }
+    }
     //   // SELECT profession, count(profession) FROM persons GROUPBY profession ORDER BY profession
-    //   expect(
-    //     query()
-    //       .select(professionCount)
-    //       .from(persons)
-    //       .groupBy(profession)
-    //       .orderBy(naturalCompare)
-    //       .execute()
-    //   ).to.deep.equal([
-    //     ["politician", 1],
-    //     ["scientific", 3],
-    //     ["teacher", 3],
-    //   ]);
+    expect(
+      query()
+        .select(professionCount)
+        .from(persons)
+        .groupBy(profession)
+        .orderBy(naturalCompare)
+        .execute()
+    ).to.deep.equal([
+      ["politician", 1],
+      ["scientific", 3],
+      ["teacher", 3],
+    ]);
   });
 
   // it("Number tests", () => {
