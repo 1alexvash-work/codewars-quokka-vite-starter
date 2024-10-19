@@ -741,100 +741,92 @@ describe("SQL tests", function () {
     ]);
   });
 
-  // it("Join tests", () => {
-  //   var teachers = [
-  //     {
-  //       teacherId: "1",
-  //       teacherName: "Peter",
-  //     },
-  //     {
-  //       teacherId: "2",
-  //       teacherName: "Anna",
-  //     },
-  //   ];
-
-  //   var students = [
-  //     {
-  //       studentName: "Michael",
-  //       tutor: "1",
-  //     },
-  //     {
-  //       studentName: "Rose",
-  //       tutor: "2",
-  //     },
-  //   ];
-
-  //   function teacherJoin(join: any) {
-  //     return join[0].teacherId === join[1].tutor;
-  //   }
-
-  //   function student(join: any) {
-  //     return {
-  //       studentName: join[1].studentName,
-  //       teacherName: join[0].teacherName,
-  //     };
-  //   }
-
-  //   // SELECT studentName, teacherName FROM teachers, students WHERE teachers.teacherId = students.tutor
-  //   expect(
-  //     query()
-  //       .select(student)
-  //       .from(teachers, students)
-  //       .where(teacherJoin)
-  //       .execute()
-  //   ).to.deep.equal([
-  //     {
-  //       studentName: "Michael",
-  //       teacherName: "Peter",
-  //     },
-  //     {
-  //       studentName: "Rose",
-  //       teacherName: "Anna",
-  //     },
-  //   ]);
-
-  //   var numbers1 = [1, 2];
-  //   var numbers2 = [4, 5];
-
-  //   expect(query().select().from(numbers1, numbers2).execute()).to.deep.equal([
-  //     [1, 4],
-  //     [1, 5],
-  //     [2, 4],
-  //     [2, 5],
-  //   ]);
-
-  //   function tutor1(join: any) {
-  //     return join[1].tutor === "1";
-  //   }
-
-  //   // SELECT studentName, teacherName FROM teachers, students WHERE teachers.teacherId = students.tutor AND tutor = 1
-  //   expect(
-  //     query()
-  //       .select(student)
-  //       .from(teachers, students)
-  //       .where(teacherJoin)
-  //       .where(tutor1)
-  //       .execute()
-  //   ).to.deep.equal([
-  //     {
-  //       studentName: "Michael",
-  //       teacherName: "Peter",
-  //     },
-  //   ]);
-  //   expect(
-  //     query()
-  //       .where(teacherJoin)
-  //       .select(student)
-  //       .where(tutor1)
-  //       .from(teachers, students)
-  //       .execute()
-  //   ).to.deep.equal([
-  //     {
-  //       studentName: "Michael",
-  //       teacherName: "Peter",
-  //     },
-  //   ]);
-  // });
+  it("Join tests", () => {
+    var teachers = [
+      {
+        teacherId: "1",
+        teacherName: "Peter",
+      },
+      {
+        teacherId: "2",
+        teacherName: "Anna",
+      },
+    ];
+    var students = [
+      {
+        studentName: "Michael",
+        tutor: "1",
+      },
+      {
+        studentName: "Rose",
+        tutor: "2",
+      },
+    ];
+    function teacherJoin(join: any) {
+      return join[0].teacherId === join[1].tutor;
+    }
+    function student(join: any) {
+      return {
+        studentName: join[1].studentName,
+        teacherName: join[0].teacherName,
+      };
+    }
+    // SELECT studentName, teacherName FROM teachers, students WHERE teachers.teacherId = students.tutor
+    expect(
+      query()
+        .select(student)
+        .from(teachers, students)
+        .where(teacherJoin)
+        .execute()
+    ).to.deep.equal([
+      {
+        studentName: "Michael",
+        teacherName: "Peter",
+      },
+      {
+        studentName: "Rose",
+        teacherName: "Anna",
+      },
+    ]);
+    //   var numbers1 = [1, 2];
+    //   var numbers2 = [4, 5];
+    //   expect(query().select().from(numbers1, numbers2).execute()).to.deep.equal([
+    //     [1, 4],
+    //     [1, 5],
+    //     [2, 4],
+    //     [2, 5],
+    //   ]);
+    //   function tutor1(join: any) {
+    //     return join[1].tutor === "1";
+    //   }
+    //   // SELECT studentName, teacherName FROM teachers, students WHERE teachers.teacherId = students.tutor AND tutor = 1
+    //   expect(
+    //     query()
+    //       .select(student)
+    //       .from(teachers, students)
+    //       .where(teacherJoin)
+    //       .where(tutor1)
+    //       .execute()
+    //   ).to.deep.equal([
+    //     {
+    //       studentName: "Michael",
+    //       teacherName: "Peter",
+    //     },
+    //   ]);
+    //   expect(
+    //     query()
+    //       .where(teacherJoin)
+    //       .select(student)
+    //       .where(tutor1)
+    //       .from(teachers, students)
+    //       .execute()
+    //   ).to.deep.equal([
+    //     {
+    //       studentName: "Michael",
+    //       teacherName: "Peter",
+    //     },
+    //   ]);
+  });
 
   it("Duplication exception tests", () => {
     function checkError(fn: any, duplicate: any) {

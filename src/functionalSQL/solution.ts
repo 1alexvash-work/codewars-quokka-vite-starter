@@ -1,13 +1,13 @@
 /*
 🖋️ Cases to handle:
 - groupBy add support for multiple levels of grouping ✅
-- Add having method ❌
+- Add having method ✅
 - Add orderBy method ✅
 - From method support multiple source of information ❌ (this query looks potentially a bit complicated)
-- Also, it looks like where and having have some advanced query case❌
+- Also, it looks like where and having have some advanced query case ❌
 */
 
-import { assertDeepEqual } from "../helpers/assertEqual";
+// import { assertDeepEqual } from "../helpers/assertEqual";
 
 type Operation = {
   name: string;
@@ -70,11 +70,12 @@ export class Query {
   operations: Operation[] = [];
   result: any = [];
 
-  from(array: any[]) {
+  from(...args: any[]) {
+    // TODO: implement multiple sources of information
     this.operations.push({
       name: "1",
-      fn: () => this.fromReal(array),
-      args: array,
+      fn: () => this.fromReal(args[0]),
+      args,
     });
 
     return this;
