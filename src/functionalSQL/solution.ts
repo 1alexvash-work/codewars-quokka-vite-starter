@@ -71,9 +71,15 @@ const convertToObjectEntries = (object: any): any => {
 export class Query {
   operations: Operation[] = [];
   result: any = [];
+  joinCase = false;
+  joinGroup: any = [];
 
   from(...args: any[]) {
-    // TODO: implement multiple sources of information
+    if (args.length > 1) {
+      this.joinCase = true;
+      this.joinGroup = args;
+    }
+
     this.operations.push({
       name: "1",
       fn: () => this.fromReal(...args),
@@ -142,6 +148,24 @@ export class Query {
       return;
     }
 
+    if (this.joinCase) {
+      const [firstGroup, secondGroup] = this.joinGroup;
+
+      const joinFunction = whereFunction[0];
+
+      const mergedGroup = firstGroup.map((firstItem: any) => {
+        const match = secondGroup.find((secondItem: any) =>
+          joinFunction([firstItem, secondItem])
+        );
+
+        return [firstItem, match];
+      });
+
+      this.result = mergedGroup;
+
+      return;
+    }
+
     const result: any = [];
 
     whereFunction.forEach((fn: any) => {
@@ -165,7 +189,6 @@ export class Query {
     this.result = this.result.filter(args);
   }
 
-  // TODO: it looks like selectReal works differently when it is followed by groupByReal
   selectReal(selectFunction: any) {
     if (selectFunction === undefined) {
       return;
@@ -229,55 +252,55 @@ const queryWrapper = () => new Query();
 export const query = queryWrapper;
 
 ///////////////////////////////////////// TESTS ⬇⬇⬇
-// var teachers = [
-//   {
-//     teacherId: "1",
-//     teacherName: "Peter",
-//   },
-//   {
-//     teacherId: "2",
-//     teacherName: "Anna",
-//   },
-// ];
-// var students = [
-//   {
-//     studentName: "Michael",
-//     tutor: "1",
-//   },
-//   {
-//     studentName: "Rose",
-//     tutor: "2",
-//   },
-// ];
-// function teacherJoin(join: any) {
-//   return join[0].teacherId === join[1].tutor;
-// }
-// function student(join: any) {
-//   return {
-//     studentName: join[1].studentName,
-//     teacherName: join[0].teacherName,
-//   };
-// }
-// // SELECT studentName, teacherName FROM teachers, students WHERE teachers.teacherId = students.tutor
+var teachers = [
+  {
+    teacherId: "1",
+    teacherName: "Peter",
+  },
+  {
+    teacherId: "2",
+    teacherName: "Anna",
+  },
+];
+var students = [
+  {
+    studentName: "Michael",
+    tutor: "1",
+  },
+  {
+    studentName: "Rose",
+    tutor: "2",
+  },
+];
+function teacherJoin(join: any) {
+  return join[0].teacherId === join[1].tutor;
+}
+function student(join: any) {
+  return {
+    studentName: join[1].studentName,
+    teacherName: join[0].teacherName,
+  };
+}
+// SELECT studentName, teacherName FROM teachers, students WHERE teachers.teacherId = students.tutor
 
-// const actual = query()
-//   .select(student)
-//   .from(teachers, students)
-//   .where(teacherJoin)
-//   .execute();
+const actual = query()
+  .select(student)
+  .from(teachers, students)
+  .where(teacherJoin)
+  .execute(); //?
 
-// const expected = [
-//   {
-//     studentName: "Michael",
-//     teacherName: "Peter",
-//   },
-//   {
-//     studentName: "Rose",
-//     teacherName: "Anna",
-//   },
-// ];
+const expected = [
+  {
+    studentName: "Michael",
+    teacherName: "Peter",
+  },
+  {
+    studentName: "Rose",
+    teacherName: "Anna",
+  },
+];
 
-// assertDeepEqual({
-//   actual,
-//   expected,
-// }); // ?
+assertDeepEqual({
+  actual,
+  expected,
+}); // ?
