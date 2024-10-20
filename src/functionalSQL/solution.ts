@@ -163,6 +163,8 @@ export class Query {
 
       this.result = mergedGroup;
 
+      this.joinCase = false;
+
       return;
     }
 
