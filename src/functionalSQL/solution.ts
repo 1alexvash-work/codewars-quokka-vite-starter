@@ -7,6 +7,8 @@
 - Also, it looks like where and having have some advanced query case ❌
 */
 
+import { assertDeepEqual } from "../helpers/assertEqual";
+
 // import { assertDeepEqual } from "../helpers/assertEqual";
 
 type Operation = {
@@ -74,7 +76,7 @@ export class Query {
     // TODO: implement multiple sources of information
     this.operations.push({
       name: "1",
-      fn: () => this.fromReal(args[0]),
+      fn: () => this.fromReal(...args),
       args,
     });
 
@@ -131,8 +133,8 @@ export class Query {
     return this;
   }
 
-  fromReal(array: number[]) {
-    this.result = [...array];
+  fromReal(...array: any) {
+    this.result = [...array[0]];
   }
 
   whereReal(...whereFunction: any) {
@@ -227,3 +229,55 @@ const queryWrapper = () => new Query();
 export const query = queryWrapper;
 
 ///////////////////////////////////////// TESTS ⬇⬇⬇
+// var teachers = [
+//   {
+//     teacherId: "1",
+//     teacherName: "Peter",
+//   },
+//   {
+//     teacherId: "2",
+//     teacherName: "Anna",
+//   },
+// ];
+// var students = [
+//   {
+//     studentName: "Michael",
+//     tutor: "1",
+//   },
+//   {
+//     studentName: "Rose",
+//     tutor: "2",
+//   },
+// ];
+// function teacherJoin(join: any) {
+//   return join[0].teacherId === join[1].tutor;
+// }
+// function student(join: any) {
+//   return {
+//     studentName: join[1].studentName,
+//     teacherName: join[0].teacherName,
+//   };
+// }
+// // SELECT studentName, teacherName FROM teachers, students WHERE teachers.teacherId = students.tutor
+
+// const actual = query()
+//   .select(student)
+//   .from(teachers, students)
+//   .where(teacherJoin)
+//   .execute();
+
+// const expected = [
+//   {
+//     studentName: "Michael",
+//     teacherName: "Peter",
+//   },
+//   {
+//     studentName: "Rose",
+//     teacherName: "Anna",
+//   },
+// ];
+
+// assertDeepEqual({
+//   actual,
+//   expected,
+// }); // ?
