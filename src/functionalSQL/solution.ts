@@ -1,16 +1,3 @@
-/*
-🖋️ Cases to handle:
-- groupBy add support for multiple levels of grouping ✅
-- Add having method ✅
-- Add orderBy method ✅
-- From method support multiple source of information ❌ (this query looks potentially a bit complicated)
-- Also, it looks like where and having have some advanced query case ❌
-*/
-
-import { assertDeepEqual } from "../helpers/assertEqual";
-
-// import { assertDeepEqual } from "../helpers/assertEqual";
-
 type Operation = {
   name: string;
   fn: (...args: any[]) => void;
@@ -142,6 +129,8 @@ export class Query {
   fromReal(...array: any) {
     this.result = [...array[0]];
 
+    // Validation for join case
+
     const whereOperations = this.operations.filter(
       (operation) => operation.name === "2"
     );
@@ -270,19 +259,3 @@ export class Query {
 }
 const queryWrapper = () => new Query();
 export const query = queryWrapper;
-
-var numbers1 = [1, 2];
-var numbers2 = [4, 5];
-
-const actual = query().select().from(numbers1, numbers2).execute();
-const expected = [
-  [1, 4],
-  [1, 5],
-  [2, 4],
-  [2, 5],
-];
-
-assertDeepEqual({
-  actual,
-  expected,
-}); // ?
