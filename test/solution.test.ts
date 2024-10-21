@@ -788,14 +788,14 @@ describe("SQL tests", function () {
         teacherName: "Anna",
       },
     ]);
-    // var numbers1 = [1, 2];
-    // var numbers2 = [4, 5];
-    // expect(query().select().from(numbers1, numbers2).execute()).to.deep.equal([
-    //   [1, 4],
-    //   [1, 5],
-    //   [2, 4],
-    //   [2, 5],
-    // ]);
+    var numbers1 = [1, 2];
+    var numbers2 = [4, 5];
+    expect(query().select().from(numbers1, numbers2).execute()).to.deep.equal([
+      [1, 4],
+      [1, 5],
+      [2, 4],
+      [2, 5],
+    ]);
     function tutor1(join: any) {
       return join[1].tutor === "1";
     }

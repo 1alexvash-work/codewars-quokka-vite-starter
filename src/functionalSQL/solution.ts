@@ -141,6 +141,24 @@ export class Query {
 
   fromReal(...array: any) {
     this.result = [...array[0]];
+
+    const whereOperations = this.operations.filter(
+      (operation) => operation.name === "2"
+    );
+
+    if (this.joinCase && whereOperations.length === 0) {
+      // Peform cartesian product
+
+      const result: any = [];
+
+      array[0].forEach((firstItem: any) => {
+        array[1].forEach((secondItem: any) => {
+          result.push([firstItem, secondItem]);
+        });
+      });
+
+      this.result = result;
+    }
   }
 
   whereReal(...whereFunction: any) {
@@ -253,53 +271,15 @@ export class Query {
 const queryWrapper = () => new Query();
 export const query = queryWrapper;
 
-///////////////////////////////////////// TESTS ⬇⬇⬇
-var teachers = [
-  {
-    teacherId: "1",
-    teacherName: "Peter",
-  },
-  {
-    teacherId: "2",
-    teacherName: "Anna",
-  },
-];
-var students = [
-  {
-    studentName: "Michael",
-    tutor: "1",
-  },
-  {
-    studentName: "Rose",
-    tutor: "2",
-  },
-];
-function teacherJoin(join: any) {
-  return join[0].teacherId === join[1].tutor;
-}
-function student(join: any) {
-  return {
-    studentName: join[1].studentName,
-    teacherName: join[0].teacherName,
-  };
-}
-// SELECT studentName, teacherName FROM teachers, students WHERE teachers.teacherId = students.tutor
+var numbers1 = [1, 2];
+var numbers2 = [4, 5];
 
-const actual = query()
-  .select(student)
-  .from(teachers, students)
-  .where(teacherJoin)
-  .execute(); //?
-
+const actual = query().select().from(numbers1, numbers2).execute();
 const expected = [
-  {
-    studentName: "Michael",
-    teacherName: "Peter",
-  },
-  {
-    studentName: "Rose",
-    teacherName: "Anna",
-  },
+  [1, 4],
+  [1, 5],
+  [2, 4],
+  [2, 5],
 ];
 
 assertDeepEqual({
